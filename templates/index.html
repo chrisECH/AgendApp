@@ -1,0 +1,27 @@
+{% extends "base_template.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="section section-page">
+    <div class="container centrar">
+        <div class="card mt-4 shadow">
+            <div class="card-header header text-center">
+                <h4>¡BIENVENIDO!</h4>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0 text-center">
+                <p>Una web hecha para poder registrar tus contactos.
+                </p>
+                </blockquote>
+
+                {% with messages = get_flashed_messages() %} {% if messages %} {% for messages in messages %}
+                    <div class="alert alert-success text-center" role="alert">
+                        {{ messages }}
+                    </div>
+                {% endfor %} {% endif %} {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base_template.html" %}
+{% block title %}Lista de contactos{% endblock %}
+
+{% block content %}
+    <div class="section page-section mt-5">
+        <div class="container centrar shadow admin-page">
+            <div class="row user-list">
+                <table class="table">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th scope="col">Foto</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Telefono</th> 
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Una vez que se mandaron los datos de la funcion lista_contactos con los datos obtenidos de la base de datos, 
+                            toca asignar esos datos a los campos correspondiente, para ello, se utiliza una tabla.
+                            En esta tabla en cada columna irán los datos que le correspondan
+                            Es decir, la foto, el nombre, el telefono y las opciones a realizar
+                        -->
+                        {% for contacto in resultado %} <!-- recorremos los datos que se mandaron con un for -->
+                        <tr>
+                            <th scope="row">
+                                <img class="img-thumbnail" width="64" height="64" src="uploads/{{contacto[3]}}"> <!-- Asignamos la imagen -->
+                            </th>
+                            <th scope="row">{{contacto[1]}}</th> <!-- Asignamos el nombre -->
+                            <th scope="row">{{contacto[2]}}</th> <!-- Asignamos el telefono -->
+                            
+                            <td> <!-- Estas son las opciones a realizar  -->
+
+                                <!-- Opcion de editar, al hacer clic mandamos el id del usuario que se va a editar -->
+                                <a href="/edit/{{contacto[0]}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <!-- Opcion de eliminar, antes de eliminar se abre un modal para confirmar que se va a eliminar el contacto -->
+                                <a href="" class="btn btn-danger" data-toggle="modal" data-placement="top" title="Borrar" data-target="#eliminarModal{{contacto[0]}}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+
+                                <!-- Modal para eliminar el contacto -->
+                                <div class="modal fade" id="eliminarModal{{contacto[0]}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Eliminar contacto</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                            ¿Seguro que quieres eliminar a {{contacto[1]}} con numero de telefono {{contacto[2]}}?
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            
+                                             <a href="/destroy/{{contacto[0]}}" class="btn btn-danger">Eliminar</a>
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        {% endfor %} <!-- Fin del ciclo for -->
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+ 
+{% endblock %}

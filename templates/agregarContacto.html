@@ -1,0 +1,98 @@
+<!-- De una plantilla padre importamos el html para evitar repeitr codigo -->
+{% extends "base_template.html" %}
+{% block title %}Añadir contacto{% endblock %} <!-- Añadimos el titulo de la pestaña, dependiendo de en que vista estamos -->
+
+{% block content %} <!-- Añadimos el contenido correspondiente a la vista -->
+    <div class="container shadow mt-5">
+        <h4 class="text mt-4 mb-5 text-center">Información de contacto</h4>
+        <!-- Validamos los campos con una funcion de JavaScript, esta funcion se manda llamar en el onsubmit del form, si el return de esta
+        funcion es "false" no se enviaran los datos a la funcion de python.
+        Si el return de esa funcion es "true" los datos se mandaran a la funcion /store para registrar el contacto.
+        (Ver el archivo de javascript en la ruta static/js/validador.js )-->
+        <form method="POST" onsubmit="return validar()" action="/store" enctype="multipart/form-data">
+            <div class="row">
+                <div class="form-group col-md-4 col-sm-4 text-center">
+                    <label for="nombre">Nombre(s) <span style="color:red">*</span></label>
+                    <input type="text" class="form-control" name="nombre" id="nombre">
+                    <small id="nombreHelpBlocker" class="form-text text-muted" >
+                        Este campo es obligatorio, debe contener un minimo de 3 caracteres. 
+                    </small>
+                    <div class="alert alert-danger" role="alert" id="errorNombre" style="display:none">
+                        
+                    </div>
+                </div>
+
+                <div class="form-group col-md-4 col-sm-4 text-center">
+                    <label for="apellidop">Apellido paterno <span style="color:red">*</span></label>
+                    <input type="text" class="form-control" name="apellidop" id="apellidop">
+                    <small id="apellidopHelpBlocker" class="form-text text-muted">
+                        Este campo es obligatorio, debe contener un minimo de 3 caracteres. 
+                    </small>
+                    <div class="alert alert-danger" role="alert" id="errorApellidop" style="display:none">
+                        
+                    </div>
+                </div>
+                <div class="form-group col-md-4 col-sm-4 text-center">
+                    <label for="apellidom">Apellido materno</label>
+                    <input type="text" class="form-control" name="apellidom" id="apellidom">
+                    <small id="apellidomHelpBlocker" class="form-text text-muted">
+                        Este no es un campo olbigatorio, en caso de agregar debe de contener un minimo de 3 caracteres.
+                    </small>
+                    <div class="alert alert-danger" role="alert" id="errorApellidom" style="display:none">
+                        
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6 col-sm-6 text-center">
+                    <label for="tel">Telefono <span style="color:red">*</span></label>
+                    <input type="tel" class="form-control" name="telefono" id="telefono">
+                    <small id="telefonoHelpBlocker" class="form-text text-muted">
+                        Este campo es obligatorio, solo debe de contener números y exactamente 10 digitos.
+                    </small>
+                    <div class="alert alert-danger" role="alert" id="errorTelefono" style="display:none">
+                        
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6 col-sm-6 text-center">
+                    <label for="mail">Correo <span style="color:red">*</span> </label>
+                    <input type="email" class="form-control" id="mail" name="mail">
+                    <small id="emailHelpBlocker" class="form-text text-muted">
+                        Este campo es obligatorio, debe de tener la siguiente extructura, ejem. hola@ejemplo.com
+                    </small>
+                    <div class="alert alert-danger" role="alert" id="errorEmail" style="display:none">
+                        
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12 col-sm-12 text-center">
+                    <label for="foto">Seleccione una foto para este contacto: <span style="color:red">*</span> </label>
+                    <input type="file" title="foto de contacto" name="fotoContacto" id="fotoContacto">
+                    <small id="imagenHelpBlocker" class="form-text text-muted">
+                        Este campo es obligatorio, cada contacto debe de tener una foto. 
+                    </small>
+                    <div class="alert alert-danger" role="alert" id="errorImagen" style="display:none">
+                        
+                    </div>
+                </div>
+
+                <div class="col-md-5"></div>
+                <button type="submit" class="btn btn-success btn-settings mb-5 mt-4">Guardar contacto
+                    <i class="fas fa-save"></i>
+                </button>
+
+                
+                
+
+            </div>
+            <!-- Esto nos sirve para mostrar los mensaje que se envien desde la funcion de /store del archivo app.py -->
+            {% with messages = get_flashed_messages() %} {% if messages %} {% for messages in messages %}
+                <div class="alert alert-danger text-center" role="alert">
+                    {{ messages }}
+                </div>
+            {% endfor %} {% endif %} {% endwith %}
+        </form>
+    </div>
+<!-- Importamos el archivo JS para validar el formulario -->
+<script type="text/javascript" src="{{url_for('static', filename='js/validador.js')}}" ></script>
+{% endblock %}

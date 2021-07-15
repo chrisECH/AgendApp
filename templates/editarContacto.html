@@ -1,0 +1,105 @@
+<!-- De una plantilla padre importamos el html para evitar repeitr codigo -->
+{% extends "base_template.html" %}
+{% block title %}Editar contacto{% endblock %} <!-- Añadimos el titulo de la pestaña, dependiendo de en que vista estamos -->
+
+{% block content %}<!-- Añadimos el contenido correspondiente a la vista -->
+<div class="container shadow mt-5">
+    <h4 class="text mt-4 mb-5 text-center">Información de contacto</h4>
+    <!-- Validamos los campos con una funcion de JavaScript, esta funcion se manda llamar en el onsubmit del form, si el return de esta
+        funcion es "false" no se enviaran los datos a la funcion de python.
+        Si el return de esa funcion es "true" los datos se mandaran a la funcion /update para actualizar el contacto.
+        (Ver el archivo de javascript en la ruta static/js/validador.js )-->
+    <form method="POST" onsubmit="return validar()" action="/update" enctype="multipart/form-data">
+        <div class="row">
+            <!-- Una vez que se mandaron los datos de la funcion /edit/<int:id> con los datos obtenidos de la base de datos, 
+                toca asignar esos datos a los campos correspondiente.
+                En cada campo se pondran los datos que le corresponden.
+            -->
+            {% for contacto in resultado %}
+            <input type="text" name="id" id="id" value="{{ contacto[0]}}" hidden>
+            <div class="form-group col-md-4 col-sm-4 text-center">
+                <label for="nombre">Nombre(s) <span style="color:red">*</span></label>
+                <input type="text" class="form-control" name="nombre" id="nombre" value="{{contacto[1]}}">
+                <small id="nombreHelpBlocker" class="form-text text-muted" >
+                    Este campo es obligatorio, debe contener un minimo de 3 caracteres. 
+                </small>
+                <div class="alert alert-danger" role="alert" id="errorNombre" style="display:none">
+                    
+                </div>
+            </div>
+
+            <div class="form-group col-md-4 col-sm-4 text-center">
+                <label for="apellidop">Apellido paterno <span style="color:red">*</span></label>
+                <input type="text" class="form-control" name="apellidop" id="apellidop" value="{{contacto[2]}}">
+                <small id="apellidopHelpBlocker" class="form-text text-muted">
+                    Este campo es obligatorio, debe contener un minimo de 3 caracteres. 
+                </small>
+                <div class="alert alert-danger" role="alert" id="errorApellidop" style="display:none">
+                    
+                </div>
+            </div>
+            <div class="form-group col-md-4 col-sm-4 text-center">
+                <label for="apellidom">Apellido materno</label>
+                <input type="text" class="form-control" name="apellidom" id="apellidom" value="{{contacto[3]}}">
+                <small id="apellidomHelpBlocker" class="form-text text-muted">
+                    Este no es un campo olbigatorio, en caso de agregar debe de contener un minimo de 3 caracteres.
+                </small>
+                <div class="alert alert-danger" role="alert" id="errorApellidom" style="display:none">
+                    
+                </div>
+            </div>
+
+            <div class="form-group col-md-6 col-sm-6 text-center">
+                <label for="tel">Telefono <span style="color:red">*</span></label>
+                <input type="tel" class="form-control" name="telefono" id="telefono" value="{{contacto[4]}}">
+                <small id="telefonoHelpBlocker" class="form-text text-muted">
+                    Este campo es obligatorio, solo debe de contener números y exactamente 10 digitos.
+                </small>
+                <div class="alert alert-danger" role="alert" id="errorTelefono" style="display:none">
+                    
+                </div>
+            </div>
+
+            <div class="form-group col-md-6 col-sm-6 text-center">
+                <label for="mail">Correo <span style="color:red">*</span> </label>
+                <input type="email" class="form-control" id="mail" name="mail" value="{{contacto[5]}}">
+                <small id="emailHelpBlocker" class="form-text text-muted">
+                    Este campo es obligatorio, debe de tener la siguiente extructura, ejem. hola@ejemplo.com
+                </small>
+                <div class="alert alert-danger" role="alert" id="errorEmail" style="display:none">
+                    
+                </div>
+            </div>
+
+            <div class="form-group col-md-12 col-sm-12 text-center">
+                <label for="foto">Seleccione una foto para este contacto: <span style="color:red">*</span> </label>
+                {{contacto[6]}}
+                <input type="file" title="foto de contacto" name="fotoContacto" id="fotoContacto" >
+                <small id="imagenHelpBlocker" class="form-text text-muted">
+                    Este campo es obligatorio, cada contacto debe de tener una foto. 
+                </small>
+                <div class="alert alert-danger" role="alert" id="errorImagen" style="display:none">
+                    
+                </div>
+            </div>
+
+            <div class="col-md-5"></div>
+            <button type="submit" class="btn btn-success btn-settings mb-5 mt-4">Guardar cambios
+                <i class="fas fa-save"></i>
+            </button>
+
+            
+            
+            {% endfor %}<!-- Fin del ciclo for -->
+        </div>
+        
+        <!-- Esto nos sirve para mostrar los mensaje que se envien desde la funcion de /update del archivo app.py -->
+        {% with messages = get_flashed_messages() %} {% if messages %} {% for messages in messages %}
+            <div class="alert alert-danger text-center" role="alert">
+                {{ messages }}
+            </div>
+        {% endfor %} {% endif %} {% endwith %}
+    </form>
+</div>
+
+{% endblock %}
